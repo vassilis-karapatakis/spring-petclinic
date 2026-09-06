@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2012-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,12 @@ public class PetClinicRuntimeHints implements RuntimeHintsRegistrar {
 	@Override
 	public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
 		hints.resources().registerPattern("db/*"); // https://github.com/spring-projects/spring-boot/issues/32654
+		hints.resources().registerPattern("db/*/*"); // nested db/{h2,mysql,postgres}
 		hints.resources().registerPattern("messages/*");
 		hints.resources().registerPattern("mysql-default-conf");
-		hints.serialization().registerType(BaseEntity.class);
-		hints.serialization().registerType(Person.class);
-		hints.serialization().registerType(Vet.class);
+		hints.reflection().registerType(BaseEntity.class, typeHint -> typeHint.withJavaSerialization(true));
+		hints.reflection().registerType(Person.class, typeHint -> typeHint.withJavaSerialization(true));
+		hints.reflection().registerType(Vet.class, typeHint -> typeHint.withJavaSerialization(true));
 	}
 
 }
